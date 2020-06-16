@@ -5,6 +5,7 @@ import com.example.showroom.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,5 +32,19 @@ public class CarController {
     @PostMapping
     public Car saveCar(@RequestBody Car car) {
         return carRepository.save(car);
+    }
+
+    @PutMapping("/{id}")
+    public Car updateCar(@RequestBody Car car, @PathVariable Long id) {
+        Car carDb = carRepository.getOne(id);
+        carDb.setColor(car.getColor());
+        carDb.setYear(car.getYear());
+        return carRepository.save(carDb);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteCar(@PathVariable Long id) {
+       carRepository.deleteById(id);
+       return "delete " + id;
     }
 }
